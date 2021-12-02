@@ -17,6 +17,9 @@ jobs:
           command: docker buildx ls
       - run:
           name: "add builder"
+          command: docker context create default && docker context use default
+      - run:
+          name: "add builder"
           command: docker buildx create --use --name builder
       - run:
           name: "build"
