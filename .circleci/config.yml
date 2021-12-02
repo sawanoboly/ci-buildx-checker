@@ -28,7 +28,10 @@ jobs:
           command: docker --context my-context buildx create --use --name builder
       - run:
           name: "build"
-          command: docker --context my-context buildx build --platform linux/amd64,linux/arm64 -t ci-buildx-checker:latest .
+          command: docker --context my-context buildx build --platform linux/amd64,linux/arm64 -t ci-buildx-checker:latest --output=type=local,dest=./ .
+      - run:
+          name: "list"
+          command: ls
 
 workflows:
   main:
