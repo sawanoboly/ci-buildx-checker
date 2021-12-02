@@ -1,6 +1,6 @@
 version: 2.1
-orbs:
-  docker-buildx: sensu/docker-buildx@1.1.1
+# orbs:
+#   docker-buildx: sensu/docker-buildx@1.1.1
 
 jobs:
   build:
@@ -15,6 +15,12 @@ jobs:
       - run:
           name: "Preview"
           command: docker buildx ls
+      - run:
+          name: "add builder"
+          command: docker buildx create --use --name builder
+      - run:
+          name: "build"
+          command: docker buildx build -t ci-buildx-checker:latest .
 
 workflows:
   main:
