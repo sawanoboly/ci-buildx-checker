@@ -15,13 +15,13 @@ jobs:
       - run:
           name: "Preview"
           command: docker buildx ls
-      - run:
-          name: "add builder"
-          command: docker context ls
+      # - run:
+      #     name: "add builder"
+      #     command: docker context ls
           # command: docker context create default && docker context use default
       - run:
           name: "add builder"
-          command: docker buildx create --use --name builder
+          command: docker buildx create --use --name builder default
       - run:
           name: "build"
           command: docker buildx build --platform linux/amd64,linux/arm64 -t ci-buildx-checker:latest .
