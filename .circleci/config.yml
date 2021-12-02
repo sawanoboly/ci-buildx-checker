@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - checkout
-      - docker-buildx
+      - docker-buildx/install
       - run:
           name: "Preview"
           command: docker buildx ls
