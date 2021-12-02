@@ -15,16 +15,20 @@ jobs:
       - run:
           name: "Preview"
           command: docker buildx ls
-      # - run:
-      #     name: "add builder"
-      #     command: docker context ls
-          # command: docker context create default && docker context use default
+      - run:
+          name: "create context"
+          command: |
+            docker context create my-context \
+              --docker "host=${DOCKER_HOST},ca=${DOCKER_CERT_PATH}/ca.pem,cert=${DOCKER_CERT_PATH}/cert.pem,key=${DOCKER_CERT_PATH}/key.pem"
+      - run:
+          name: "use my-context"
+          command: docker context use my-context
       - run:
           name: "add builder"
-          command: docker buildx create --use --name builder default
+          command: docker --context my-context buildx create --use --name builder
       - run:
           name: "build"
-          command: docker buildx build --platform linux/amd64,linux/arm64 -t ci-buildx-checker:latest .
+          command: docker --context my-context buildx build --platform linux/amd64,linux/arm64 -t ci-buildx-checker:latest .
 
 workflows:
   main:
