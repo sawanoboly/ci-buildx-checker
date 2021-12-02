@@ -8,8 +8,10 @@ jobs:
       - image: cimg/base:2021.04
 
     steps:
+      - setup_remote_docker:
+          version: 20.10.7
       - checkout
-      - docker-buildx/install
+      # - docker-buildx/install
       - run:
           name: "Preview"
           command: docker buildx ls
