@@ -1,20 +1,22 @@
 version: 2.1
-# orbs:
-#   docker-buildx: sensu/docker-buildx@1.1.1
+# https://circleci.com/ja/blog/building-docker-images-for-multiple-os-architectures/
 
 jobs:
   build:
     docker:
       - image: cimg/base:2021.04
+    environment:
+      BUILDX_PLATFORMS: "linux/amd64,linux/arm64"
 
     steps:
       - setup_remote_docker:
           version: 20.10.7
       - checkout
-      # - docker-buildx/install
       - run:
           name: "Preview"
-          command: docker buildx ls
+          command: |
+            docker run --rm --privileged tonistiigi/binfmt:latest --install "$BUILDX_PLATFORMS"
+            docker buildx ls
       - run:
           name: "create context"
           command: |
@@ -28,7 +30,7 @@ jobs:
           command: docker --context my-context buildx create --use --name builder
       - run:
           name: "build"
-          command: docker --context my-context buildx build --platform linux/amd64,linux/arm64 -t ci-buildx-checker:latest --output=type=local,dest=./ .
+          command: docker --context my-context buildx build --platform "$BUILDX_PLATFORMS" -t ci-buildx-checker:latest --output=type=local,dest=./ .
       - run:
           name: "list"
           command: ls

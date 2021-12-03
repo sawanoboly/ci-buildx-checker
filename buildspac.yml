@@ -1,0 +1,62 @@
+
+version: 0.2
+# https://circleci.com/ja/blog/building-docker-images-for-multiple-os-architectures/
+
+env:
+  variables:
+    BUILDX_PLATFORMS: "linux/amd64,linux/arm64"
+  #parameter-store:
+     # key: "value"
+     # key: "value"
+  #secrets-manager:
+     # key: secret-id:json-key:version-stage:version-id
+     # key: secret-id:json-key:version-stage:version-id
+  #exported-variables:
+     # - variable
+     # - variable
+  #git-credential-helper: yes
+#batch:
+  #fast-fail: true
+  #build-list:
+  #build-matrix:
+  #build-graph:
+phases:
+  install:
+    commands:
+      # https://github.com/docker/buildx/releases
+      - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
+      - mkdir -p ~/.docker/cli-plugins || true
+      - wget -nv -O ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.7.1/buildx-v0.7.1.linux-amd64
+      - chmod +x ~/.docker/cli-plugins/docker-buildx
+      - docker run --rm --privileged tonistiigi/binfmt:latest --install "$BUILDX_PLATFORMS"
+  #pre_build:
+    #commands:
+      # - command
+      # - command
+  build:
+    commands:
+      - docker buildx create --name mybuilder --use
+      - docker buildx build --platform ${BUILDX_PLATFORMS} -t ci-buildx-checker:latest --output=type=local,dest=./ .
+      - ls
+  #post_build:
+    #commands:
+      # - command
+      # - command
+#reports:
+  #report-name-or-arn:
+    #files:
+      # - location
+      # - location
+    #base-directory: location
+    #discard-paths: yes
+    #file-format: JunitXml | CucumberJson
+#artifacts:
+  #files:
+    # - location
+    # - location
+  #name: $(date +%Y-%m-%d)
+  #discard-paths: yes
+  #base-directory: location
+#cache:
+  #paths:
+    # - paths
