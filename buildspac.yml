@@ -25,6 +25,7 @@ phases:
     commands:
       # https://github.com/docker/buildx/releases
       - docker login -u $DOCKERHUB_USER -p $DOCKERHUB_TOKEN
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
       - mkdir -p ~/.docker/cli-plugins || true
       - wget -nv -O ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.7.1/buildx-v0.7.1.linux-amd64
       - chmod +x ~/.docker/cli-plugins/docker-buildx
