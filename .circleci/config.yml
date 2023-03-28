@@ -21,9 +21,7 @@ jobs:
           command: docker image ls
       - run:
           name: "inspect"
-          command: |
-            docker image inspect ci-buildx-checker:arm64
-            docker image inspect ci-buildx-checker:amd64
+          command: docker image ls -q | xargs docker image inspect --format "{{.Architecture}} {{.RepoTags}}"
 
 workflows:
   main:
