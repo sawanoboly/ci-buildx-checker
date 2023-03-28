@@ -19,6 +19,11 @@ jobs:
       - run:
           name: "list"
           command: docker image ls
+      - run:
+          name: "inspect"
+          command: |
+            docker image inspect ci-buildx-checker:arm64
+            docker image inspect ci-buildx-checker:amd64
 
 workflows:
   main:
