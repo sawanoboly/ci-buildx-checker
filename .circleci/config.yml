@@ -12,7 +12,7 @@ jobs:
       - checkout
       - run:
           name: "add builder"
-          command: docker --context my-context buildx create --use --name builder
+          command: docker buildx create --use --name builder
       - run:
           name: "build"
           command: docker buildx bake --no-cache --load
