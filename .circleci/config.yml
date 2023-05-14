@@ -31,7 +31,7 @@ jobs:
       BUILDX_PLATFORMS: "linux/arm64"
 
     steps:
-      - setup_remote_docker
+      # - setup_remote_docker
       - checkout
       - run:
           name: "add builder"
