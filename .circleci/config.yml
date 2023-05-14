@@ -23,10 +23,38 @@ jobs:
           name: "inspect"
           command: docker image ls -q | xargs docker image inspect --format "{{.Architecture}} {{.RepoTags}}"
 
+  build_arm:
+    machine:
+      image: ubuntu-2004:202101-01
+    resource_class: arm.medium
+    environment:
+      BUILDX_PLATFORMS: "linux/arm64"
+
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: "add builder"
+          command: docker buildx create --use --name builder
+      - run:
+          name: "build"
+          command: docker buildx bake --no-cache --load
+      - run:
+          name: "list"
+          command: docker image ls
+      - run:
+          name: "inspect"
+          command: docker image ls -q | xargs docker image inspect --format "{{.Architecture}} {{.RepoTags}}"
+
 workflows:
   main:
     jobs:
       - build:
+          filters:
+            branches:
+              only:
+                - main
+      - build_arm:
           filters:
             branches:
               only:
